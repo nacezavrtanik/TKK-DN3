@@ -7,7 +7,7 @@ def hes(niz):
     return hashlib.sha1(niz.encode('utf-8')).hexdigest()
 
 
-def dn3(n=7):
+def dn3():
 
     hashi = set()
     beseda1 = ''
@@ -74,7 +74,7 @@ def dn3(n=7):
     blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
     vrstica5 = hes(blok)
     stevec3 = 0
-    while vrstica5[0:n] != n*'0':
+    while vrstica5[0:7] != '0000000':
         vrstica4 = int(hes(str(stevec3)), 16)
         blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
         vrstica5 = hes(blok)

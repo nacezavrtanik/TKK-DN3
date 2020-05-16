@@ -29,7 +29,7 @@ def blockchain():
     hashi = set()
     beseda1 = ''
     beseda2 = ''
-    seed = random.choice(range(100))
+    seed = random.randrange(1000)
 
     # Prva beseda:
     stevec1 = 0
@@ -75,16 +75,19 @@ def blockchain():
 # Vrstice 1, 2, 3:
     vrstica1 = besedilo + ' ' + str(int(hes(besedilo), 16))
     vrstica2 = '27131106 {} {}'.format(Gamma, Delta)
-    vrstica3 = input('Vnesi hash prejšnjega bloka: ')
+    vrstica3 = input('Vnesi 5. vrstico prejšnjega bloka: ')
+
+    print('Računam...')
 
 # Vrstici 4, 5:
     vrstica4 = '"This is how, one sunrise, we cut down them canoes."'
-    blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
+    blok0 = '{}\n{}\n{}\n'.format(vrstica1, vrstica2, vrstica3)
+    blok = blok0 + str(vrstica4)
     vrstica5 = hes(blok)
     stevec3 = 0
     while vrstica5[0:7] != '0000000':
-        vrstica4 = int(hes(str(stevec3)), 16)
-        blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
+        vrstica4 = stevec3
+        blok = blok0 + str(vrstica4)
         vrstica5 = hes(blok)
         stevec3 += 1
         
@@ -103,10 +106,3 @@ def blockchain():
 
 
 blockchain()
-
-
-
-
-
-
-          

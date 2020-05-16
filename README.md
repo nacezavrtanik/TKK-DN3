@@ -1,4 +1,4 @@
-#3. domača naloga (TKK)
+3. domača naloga (TKK)
 
 Naloge:
 - poenostaviti kodo:

@@ -7,7 +7,7 @@ def hes(niz):
     return hashlib.sha1(niz.encode('utf-8')).hexdigest()
 
 
-def dn3(prejsnji_blok='hash prejšnjega bloka'):
+def dn3(n=7):
 
     hashi = set()
     beseda1 = ''
@@ -40,22 +40,18 @@ def dn3(prejsnji_blok='hash prejšnjega bloka'):
     besedilo = beseda1 + ' ' + beseda2
 
 
-    # Generira praštevili p in q:
     pq = DSA.generate(1024)
     p = pq.p
     q = pq.q
     
-    # Generira zasebni ključ a:
     a = random.randrange(q)
 
-    # Generira števili alpha in beta:
     h = random.randrange(p)
     alpha = 1
     while alpha == 1:
         alpha = pow(h, int((p-1)/q), p)
     beta = pow(alpha, a, p)
 
-    # Natisne zasebni ključ a in javni ključ (p, q, alpha, beta):
     print('Zasebni ključ a:\n' + str(a))
     print('\nJavni ključ (p, q, alpha, beta):')
     print('{}\n{}\n{}\n{}'.format(p, q, alpha, beta))
@@ -72,14 +68,14 @@ def dn3(prejsnji_blok='hash prejšnjega bloka'):
     
     vrstica1 = besedilo + ' ' + str(int(hes(besedilo), 16))
     vrstica2 = '27131106 {} {}'.format(gamma, delta)
-    vrstica3 = prejsnji_blok
+    vrstica3 = input('\nVnesi hash prejšnjega bloka: ')
+    
     vrstica4 = '"This is how, one sunrise, we cut down them canoes."'
-
     blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
     vrstica5 = hes(blok)
     stevec3 = 0
-    while vrstica5[0:7] != '0000000':
-        vrstica4 = str(stevec3)
+    while vrstica5[0:n] != n*'0':
+        vrstica4 = int(hes(str(stevec3)), 16)
         blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
         vrstica5 = hes(blok)
         stevec3 += 1
@@ -87,20 +83,17 @@ def dn3(prejsnji_blok='hash prejšnjega bloka'):
     print('\nBlok:')
     print('{}\n{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4, vrstica5))
 
+    zapisi = input('\nShrani v datoteko? (y/n): ')
+    if zapisi == 'y':
+        dn3 = open(input('Vnesi ime datoteke: ') + '.txt', 'x')
+        dn3.write('Zasebni ključ a:\n' + str(a))
+        dn3.write('\n\nJavni ključ (p, q, alpha, beta):\n')
+        dn3.write('{}\n{}\n{}\n{}'.format(p, q, alpha, beta))
+        dn3.write('\n\nBlok:\n')
+        dn3.write('{}\n{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4, vrstica5))
+        dn3.close
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print('Zaključeno!')
 
 
 

@@ -81,13 +81,12 @@ def blockchain():
 
 # Vrstici 4, 5:
     vrstica4 = '"This is how, one sunrise, we cut down them canoes."'
-    blok0 = '{}\n{}\n{}\n'.format(vrstica1, vrstica2, vrstica3)
-    blok = blok0 + str(vrstica4)
+    blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
     vrstica5 = hes(blok)
     stevec3 = 0
     while vrstica5[0:7] != '0000000':
         vrstica4 = stevec3
-        blok = blok0 + str(vrstica4)
+        blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
         vrstica5 = hes(blok)
         stevec3 += 1
         

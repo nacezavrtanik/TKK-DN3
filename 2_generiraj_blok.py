@@ -1,19 +1,37 @@
-from Crypto.PublicKey import DSA
 import hashlib
 import random
 
 
+# Izračuna hash (SHA-1) niza, v hex:
 def hes(niz):
     return hashlib.sha1(niz.encode('utf-8')).hexdigest()
 
 
-def dn3():
+# Podpise besedilo z DSA (SHA-1):
+def podpisiDSA(tekst, a, p, q, alpha, beta):
+    gamma = 0
+    delta = 0
+    while gamma * delta == 0:
+        k = random.randrange(q)
+        gamma = pow(alpha, k, p) % q
+        k_inv = pow(k, q-2, q)
+        h = int(hes(tekst), 16)
+        delta = k_inv * (h + a * gamma) % q
+    return(gamma, delta)
+    
 
+# Generira naslednji blok blockchaina:
+def blockchain():
+
+    print('Računam...')
+
+# Priprava besedila:
     hashi = set()
     beseda1 = ''
     beseda2 = ''
     seed = random.choice(range(100))
 
+    # Prva beseda:
     stevec1 = 0
     while True:
         b1 = str(seed + stevec1) + str(stevec1)
@@ -25,7 +43,8 @@ def dn3():
         else:
             hashi.add(delni1)
         stevec1 += 1
-
+        
+    # Druga beseda:
     stevec2 = 0
     while True:
         b2 = str(seed + stevec2) + str(stevec2)
@@ -36,40 +55,29 @@ def dn3():
             break
         else:
             stevec2 += 1
-
+            
+    # Besedilo:
     besedilo = beseda1 + ' ' + beseda2
 
+# Prebere ključa za DSA iz datoteke 'dsa.txt':
+    dsa = open('dsa.txt', 'r')
+    A = int(dsa.readline())
+    dsa.readline()
+    P = int(dsa.readline())
+    Q = int(dsa.readline())
+    Alpha = int(dsa.readline())
+    Beta = int(dsa.readline())
+    dsa.close()
 
-    pq = DSA.generate(1024)
-    p = pq.p
-    q = pq.q
-    
-    a = random.randrange(q)
+# Podpiše besedilo:
+    (Gamma, Delta) = podpisiDSA(besedilo, A, P, Q, Alpha, Beta)
 
-    h = random.randrange(p)
-    alpha = 1
-    while alpha == 1:
-        alpha = pow(h, int((p-1)/q), p)
-    beta = pow(alpha, a, p)
-
-    print('Zasebni ključ a:\n' + str(a))
-    print('\nJavni ključ (p, q, alpha, beta):')
-    print('{}\n{}\n{}\n{}'.format(p, q, alpha, beta))
-
-
-    gamma = 0
-    delta = 0
-    while gamma * delta == 0:
-        k = random.randrange(q)
-        gamma = pow(alpha, k, p) % q
-        k_inv = pow(k, q-2, q)
-        h = int(hes(besedilo), 16)
-        delta = k_inv * (h + a * gamma) % q
-    
+# Vrstice 1, 2, 3:
     vrstica1 = besedilo + ' ' + str(int(hes(besedilo), 16))
-    vrstica2 = '27131106 {} {}'.format(gamma, delta)
-    vrstica3 = input('\nVnesi hash prejšnjega bloka: ')
-    
+    vrstica2 = '27131106 {} {}'.format(Gamma, Delta)
+    vrstica3 = input('Vnesi hash prejšnjega bloka: ')
+
+# Vrstici 4, 5:
     vrstica4 = '"This is how, one sunrise, we cut down them canoes."'
     blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
     vrstica5 = hes(blok)
@@ -79,21 +87,22 @@ def dn3():
         blok = '{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4)
         vrstica5 = hes(blok)
         stevec3 += 1
-
+        
+# Izpiše blok:
     print('\nBlok:')
     print('{}\n{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4, vrstica5))
 
+# Izpisan blok shrani v datoteko z izbranim imenom:
     zapisi = input('\nShrani v datoteko? (y/n): ')
     if zapisi == 'y':
         dn3 = open(input('Vnesi ime datoteke: ') + '.txt', 'x')
-        dn3.write('Zasebni ključ a:\n' + str(a))
-        dn3.write('\n\nJavni ključ (p, q, alpha, beta):\n')
-        dn3.write('{}\n{}\n{}\n{}'.format(p, q, alpha, beta))
-        dn3.write('\n\nBlok:\n')
         dn3.write('{}\n{}\n{}\n{}\n{}'.format(vrstica1, vrstica2, vrstica3, vrstica4, vrstica5))
         dn3.close
 
-    print('Zaključeno!')
+    input('Zaključeno!')
+
+
+blockchain()
 
 
 

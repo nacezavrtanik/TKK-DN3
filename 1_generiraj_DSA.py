@@ -16,7 +16,7 @@ while alpha == 1:
     alpha = pow(h, int((p-1)/q), p)
 beta = pow(alpha, a, p)
 
-# Izpiše genirana ključa:
+# Izpiše generirana ključa:
 print('Zasebni ključ a:\n' + str(a))
 print('\nJavni ključ (p, q, alpha, beta):')
 print('{}\n{}\n{}\n{}'.format(p, q, alpha, beta))

@@ -8,3 +8,5 @@ Navodila:
 
 Naloge:
 - opombe
+- preveriti, če še vedno pravilno dela
+- boljše zaporedje pri generiranju besed?

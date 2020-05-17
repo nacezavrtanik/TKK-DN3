@@ -24,7 +24,7 @@ print('{}\n{}\n{}\n{}'.format(p, q, alpha, beta))
 # Generirana ključa shrani v datoteko 'dsa.txt':
 zapisi = input('\nŽeliš generirana ključa shraniti v novo datoteko dsa.txt? (y/n): ')
 if zapisi == 'y':
-    dsa = open('dsa.txt', 'a')
+    dsa = open('dsa.txt', 'x')
     dsa.write('{}\n\n{}\n{}\n{}\n{}'.format(a, p, q, alpha, beta))
     dsa.close()
 input('Zaključeno!')
